@@ -40,6 +40,7 @@ function renderSlashCommandsMenu() {
   const textareaParentParent = textarea?.parentElement?.parentElement;
 
   textareaParentParent?.insertBefore(div, textareaParentParent.firstChild);
+  textareaParentParent?.classList.add('flex-col');
   render(<SlashCommandsMenu textarea={textarea} />, div);
 }
 
