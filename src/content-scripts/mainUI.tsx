@@ -1,14 +1,25 @@
 import '../style/base.css';
 import { h, render } from 'preact';
-import { getTextArea, getFooter, getRootElement, getSubmitButton, getWebChatGPTToolbar } from '../util/elementFinder';
+import {
+  getTextArea,
+  getFooter,
+  getRootElement,
+  getSubmitButton,
+  getWebChatGPTToolbar,
+} from '../util/elementFinder';
 import Toolbar from 'src/components/toolbar';
 import ErrorMessage from 'src/components/errorMessage';
 import { getUserConfig, UserConfig } from 'src/util/userConfig';
 import { SearchRequest, SearchResult, webSearch } from './web_search';
 
 import createShadowRoot from 'src/util/createShadowRoot';
-import { compilePrompt, promptContainsWebResults } from 'src/util/promptManager';
-import SlashCommandsMenu, { slashCommands } from 'src/components/slashCommandsMenu';
+import {
+  compilePrompt,
+  promptContainsWebResults,
+} from 'src/util/promptManager';
+import SlashCommandsMenu, {
+  slashCommands,
+} from 'src/components/slashCommandsMenu';
 import { apiExtractText } from './api';
 
 let isProcessing = false;
@@ -89,7 +100,10 @@ async function onSubmit(event: MouseEvent | KeyboardEvent) {
 
   if (isKeyEvent && event.key === 'Enter' && event.isComposing) return;
 
-  if (!isProcessing && (event.type === 'click' || (isKeyEvent && event.key === 'Enter'))) {
+  if (
+    !isProcessing &&
+    (event.type === 'click' || (isKeyEvent && event.key === 'Enter'))
+  ) {
     const query = textarea?.value.trim();
 
     if (!query) return;
@@ -97,7 +111,8 @@ async function onSubmit(event: MouseEvent | KeyboardEvent) {
     textarea.value = '';
 
     const isPartialCommand = slashCommands.some(
-      (command) => command.name.startsWith(query) && query.length <= command.name.length
+      (command) =>
+        command.name.startsWith(query) && query.length <= command.name.length
     );
     if (isPartialCommand) {
       return;
@@ -165,13 +180,19 @@ async function updateUI() {
 async function renderToolbar() {
   try {
     const textareaParentParent = textarea?.parentElement?.parentElement;
-    const { shadowRootDiv, shadowRoot } = await createShadowRoot('content-scripts/mainUI.css');
+    const { shadowRootDiv, shadowRoot } = await createShadowRoot(
+      'content-scripts/mainUI.css'
+    );
     shadowRootDiv.classList.add('wcg-toolbar');
     textareaParentParent?.appendChild(shadowRootDiv);
     render(<Toolbar textarea={textarea} />, shadowRoot);
   } catch (e) {
     if (e instanceof Error) {
-      showErrorMessage(Error(`Error loading WebChatGPT toolbar: ${e.message}. Please reload the page (F5).`));
+      showErrorMessage(
+        Error(
+          `Error loading WebChatGPT toolbar: ${e.message}. Please reload the page (F5).`
+        )
+      );
     }
   }
 }

@@ -1,7 +1,8 @@
 import Browser from 'webextension-polyfill';
 import * as localizedStrings from './localizedStrings.json';
 
-export const getSystemLanguage = () => Browser.i18n.getUILanguage().split('-')[0];
+export const getSystemLanguage = () =>
+  Browser.i18n.getUILanguage().split('-')[0];
 
 export const Languages = {
   auto: 'Auto',
@@ -29,7 +30,8 @@ let language = getSystemLanguage();
 
 export const getLocaleLanguage = () => language;
 
-export const getCurrentLanguageName = () => (language === Languages.auto ? Languages.en : Languages[language]);
+export const getCurrentLanguageName = () =>
+  language === Languages.auto ? Languages.en : Languages[language];
 
 export const setLocaleLanguage = (newLanguage: string) => {
   language = newLanguage === 'auto' ? getSystemLanguage() : newLanguage;

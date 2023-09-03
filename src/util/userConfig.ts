@@ -19,6 +19,8 @@ export async function getUserConfig(): Promise<UserConfig> {
   return defaults(config, defaultConfig);
 }
 
-export async function updateUserConfig(config: Partial<UserConfig>): Promise<void> {
+export async function updateUserConfig(
+  config: Partial<UserConfig>
+): Promise<void> {
   await Browser.storage.sync.set(config);
 }

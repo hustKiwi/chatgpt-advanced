@@ -3,7 +3,7 @@
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
-  "version": "3.3.1",
+  "version": "4.0.0",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -30,7 +30,11 @@
     "open_in_tab": true,
     "chrome_style": true
   },
-  "web_accessible_resources": ["content-scripts/mainUI.css", "icons/icon48.png", "leave_review.png"],
+  "web_accessible_resources": [
+    "content-scripts/mainUI.css",
+    "icons/icon48.png",
+    "leave_review.png"
+  ],
   "commands": {
     "toggle-web-access": {
       "suggested_key": {

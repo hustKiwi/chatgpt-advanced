@@ -1,13 +1,20 @@
 import { h } from 'preact';
 import { useState, useEffect, useRef, useLayoutEffect } from 'preact/hooks';
 import { getTranslation, localizationKeys } from 'src/util/localization';
-import { deletePrompt, getDefaultPrompt, getSavedPrompts, Prompt, savePrompt } from 'src/util/promptManager';
+import {
+  deletePrompt,
+  getDefaultPrompt,
+  getSavedPrompts,
+  Prompt,
+  savePrompt,
+} from 'src/util/promptManager';
 import TooltipWrapper from './tooltipWrapper';
 
 const PromptEditor = (props: { language: string }) => {
   const [savedPrompts, setSavedPrompts] = useState<Prompt[]>([]);
   const [prompt, setPrompt] = useState<Prompt>(getDefaultPrompt());
-  const [hasWebResultsPlaceholder, setHasWebResultsPlaceholder] = useState(false);
+  const [hasWebResultsPlaceholder, setHasWebResultsPlaceholder] =
+    useState(false);
   const [hasQueryPlaceholder, setHasQueryPlaceholder] = useState(false);
   const [deleteBtnText, setDeleteBtnText] = useState('delete');
 
@@ -97,8 +104,14 @@ const PromptEditor = (props: { language: string }) => {
       const start = textareaRef.current.selectionStart;
       const end = textareaRef.current.selectionEnd;
       const currentText = textareaRef.current.value;
-      const newText = currentText.substring(0, start) + text + currentText.substring(end, currentText.length);
-      textareaRef.current.setSelectionRange(start + text.length, start + text.length);
+      const newText =
+        currentText.substring(0, start) +
+        text +
+        currentText.substring(end, currentText.length);
+      textareaRef.current.setSelectionRange(
+        start + text.length,
+        start + text.length
+      );
       textareaRef.current.focus();
 
       setPrompt({ ...prompt, text: newText });
@@ -121,11 +134,18 @@ const PromptEditor = (props: { language: string }) => {
   const actionToolbar = (
     <div
       className={`wcg-mt-4 wcg-flex wcg-flex-row wcg-justify-between
-                        ${prompt.uuid === 'default' || prompt.uuid === 'default_en' ? 'wcg-hidden' : ''}`}
+                        ${
+                          prompt.uuid === 'default' ||
+                          prompt.uuid === 'default_en'
+                            ? 'wcg-hidden'
+                            : ''
+                        }`}
     >
       <div className="wcg-flex wcg-flex-row wcg-gap-4">
         {/* <TooltipWrapper tip={showErrors ? getTranslation(localizationKeys.placeHolderTips.webResults) : ""}> */}
-        <TooltipWrapper tip={getTranslation(localizationKeys.placeHolderTips.webResults)}>
+        <TooltipWrapper
+          tip={getTranslation(localizationKeys.placeHolderTips.webResults)}
+        >
           <button
             // ${showErrors && webResultsError ? "wcg-btn-error" : hasWebResultsPlaceholder ? "wcg-btn-success" : "wcg-btn-warning"}
             className={`wcg-btn-success wcg-btn
@@ -139,7 +159,9 @@ const PromptEditor = (props: { language: string }) => {
           </button>
         </TooltipWrapper>
         {/* <TooltipWrapper tip={showErrors ? getTranslation(localizationKeys.placeHolderTips.query) : ""}> */}
-        <TooltipWrapper tip={getTranslation(localizationKeys.placeHolderTips.query)}>
+        <TooltipWrapper
+          tip={getTranslation(localizationKeys.placeHolderTips.query)}
+        >
           <button
             className={`wcg-btn
                         ${
@@ -158,7 +180,9 @@ const PromptEditor = (props: { language: string }) => {
             {'{query}'}
           </button>
         </TooltipWrapper>
-        <TooltipWrapper tip={getTranslation(localizationKeys.placeHolderTips.currentDate)}>
+        <TooltipWrapper
+          tip={getTranslation(localizationKeys.placeHolderTips.currentDate)}
+        >
           <button
             className="wcg-btn-success wcg-btn wcg-p-1 wcg-lowercase"
             onClick={() => handleInsertText('{current_date}')}
@@ -168,7 +192,11 @@ const PromptEditor = (props: { language: string }) => {
         </TooltipWrapper>
       </div>
 
-      <button type={'button'} className="wcg-btn-primary wcg-btn wcg-text-base" onClick={handleSave}>
+      <button
+        type={'button'}
+        className="wcg-btn-primary wcg-btn wcg-text-base"
+        onClick={handleSave}
+      >
         {getTranslation(localizationKeys.buttons.save)}
       </button>
     </div>
@@ -176,7 +204,11 @@ const PromptEditor = (props: { language: string }) => {
 
   const PromptList = (
     <div>
-      <button type={'button'} className="wcg-btn-primary wcg-btn wcg-w-full wcg-text-base" onClick={handleAdd}>
+      <button
+        type={'button'}
+        className="wcg-btn-primary wcg-btn wcg-w-full wcg-text-base"
+        onClick={handleAdd}
+      >
         <span class="material-symbols-outlined wcg-mr-2">add_circle</span>
         {getTranslation(localizationKeys.buttons.newPrompt)}
       </button>
@@ -187,7 +219,13 @@ const PromptEditor = (props: { language: string }) => {
       >
         {savedPrompts.map((prmpt: Prompt) => (
           <li key={prmpt.uuid} onClick={() => handleSelect(prmpt)}>
-            <a className={`wcg-text-base ${prmpt.uuid === prompt.uuid ? 'wcg-active' : ''}`}>📝 {prmpt.name}</a>
+            <a
+              className={`wcg-text-base ${
+                prmpt.uuid === prompt.uuid ? 'wcg-active' : ''
+              }`}
+            >
+              📝 {prmpt.name}
+            </a>
           </li>
         ))}
       </ul>
@@ -199,7 +237,9 @@ const PromptEditor = (props: { language: string }) => {
       ref={nameInputRef}
       className={`wcg-input-bordered wcg-input wcg-flex-1
                         ${showErrors && nameError ? 'wcg-input-error' : ''}`}
-      placeholder={getTranslation(localizationKeys.placeholders.namePlaceholder)}
+      placeholder={getTranslation(
+        localizationKeys.placeholders.namePlaceholder
+      )}
       value={prompt.name}
       onInput={(e: Event) => {
         setNameError(false);
@@ -213,8 +253,16 @@ const PromptEditor = (props: { language: string }) => {
     <button
       type={'button'}
       className={`wcg-btn wcg-text-base
-                    ${deleteBtnText === 'check' ? 'wcg-btn-error' : 'wcg-btn-primary'}
-                    ${prompt.uuid === 'default' || prompt.uuid === 'default_en' ? 'wcg-hidden' : ''}`}
+                    ${
+                      deleteBtnText === 'check'
+                        ? 'wcg-btn-error'
+                        : 'wcg-btn-primary'
+                    }
+                    ${
+                      prompt.uuid === 'default' || prompt.uuid === 'default_en'
+                        ? 'wcg-hidden'
+                        : ''
+                    }`}
       onClick={handleDeleteBtnClick}
     >
       <span class="material-symbols-outlined">{deleteBtnText}</span>

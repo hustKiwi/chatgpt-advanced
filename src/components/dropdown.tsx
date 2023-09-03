@@ -14,7 +14,11 @@ function Dropdown(props: {
       onClick={props.onClick}
     >
       {props.options.map(({ value, label }) => (
-        <option className="wcg-bg-[#343541] wcg-text-white" key={value} value={value}>
+        <option
+          className="wcg-bg-[#343541] wcg-text-white"
+          key={value}
+          value={value}
+        >
           {label}
         </option>
       ))}

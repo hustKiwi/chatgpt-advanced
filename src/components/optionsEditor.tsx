@@ -14,10 +14,14 @@ const OptionsEditor = () => {
 
   return (
     <div className="wcg-flex wcg-w-4/5 wcg-flex-col wcg-gap-2">
-      <h1 className="wcg-m-0 wcg-p-0 wcg-text-2xl">{getTranslation(localizationKeys.UI.options)}</h1>
+      <h1 className="wcg-m-0 wcg-p-0 wcg-text-2xl">
+        {getTranslation(localizationKeys.UI.options)}
+      </h1>
       <div class="wcg-form-control">
         <label className="wcg-label wcg-flex wcg-w-fit wcg-cursor-pointer wcg-items-center wcg-gap-2">
-          <span className="wcg-label-text wcg-text-lg">{getTranslation(localizationKeys.UI.trimLongText)}</span>
+          <span className="wcg-label-text wcg-text-lg">
+            {getTranslation(localizationKeys.UI.trimLongText)}
+          </span>
           <input
             type="checkbox"
             checked={trimLongText}

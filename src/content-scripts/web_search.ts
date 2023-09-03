@@ -21,7 +21,10 @@ export interface SearchResult {
   url: string;
 }
 
-export async function getHtml({ query, timerange }: SearchRequest): Promise<SearchResponse> {
+export async function getHtml({
+  query,
+  timerange,
+}: SearchRequest): Promise<SearchResponse> {
   const params = new URLSearchParams({
     q: query,
     btf: timerange,
@@ -31,10 +34,16 @@ export async function getHtml({ query, timerange }: SearchRequest): Promise<Sear
   const response = await fetch(`${BASE_URL}?${params.toString()}`);
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch: ${response.status} ${response.statusText}`
+    );
   }
 
-  return { status: response.status, html: await response.text(), url: response.url };
+  return {
+    status: response.status,
+    html: await response.text(),
+    url: response.url,
+  };
 }
 
 function extractRealUrl(url: string): string {
@@ -61,7 +70,9 @@ function htmlToSearchResults(html: string, numResults: number): SearchResult[] {
 
     results.push({
       title: rightPanelLink.text().trim(),
-      body: `${rightPanel.find('.compText').text().trim()}${rightPanelInfoText ? `\n\n${rightPanelInfoText}` : ''}`,
+      body: `${rightPanel.find('.compText').text().trim()}${
+        rightPanelInfoText ? `\n\n${rightPanelInfoText}` : ''
+      }`,
       url: extractRealUrl(rightPanelLink.attr('href') ?? ''),
     });
   }
@@ -82,7 +93,10 @@ function htmlToSearchResults(html: string, numResults: number): SearchResult[] {
   return results;
 }
 
-export async function webSearch(search: SearchRequest, numResults: number): Promise<SearchResult[]> {
+export async function webSearch(
+  search: SearchRequest,
+  numResults: number
+): Promise<SearchResult[]> {
   const response: SearchResponse = await Browser.runtime.sendMessage({
     type: 'get_search_results',
     search,

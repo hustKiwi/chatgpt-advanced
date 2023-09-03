@@ -7,7 +7,11 @@ import timePeriodOptions from 'src/util/timePeriodOptions.json';
 import regionOptions from 'src/util/regionOptions.json';
 import Browser from 'webextension-polyfill';
 import Dropdown from './dropdown';
-import { getTranslation, localizationKeys, setLocaleLanguage } from 'src/util/localization';
+import {
+  getTranslation,
+  localizationKeys,
+  setLocaleLanguage,
+} from 'src/util/localization';
 import Footer from './footer';
 
 type DropdownItem = {
@@ -16,10 +20,12 @@ type DropdownItem = {
   };
 };
 
-const numResultsOptions = Array.from({ length: 10 }, (_, i) => i + 1).map((num) => ({
-  value: num,
-  label: `${num} result${num === 1 ? '' : 's'}`,
-}));
+const numResultsOptions = Array.from({ length: 10 }, (_, i) => i + 1).map(
+  (num) => ({
+    value: num,
+    label: `${num} result${num === 1 ? '' : 's'}`,
+  })
+);
 
 numResultsOptions.push({
   value: 100,
@@ -78,7 +84,10 @@ const Toolbar = ({ textarea }: ToolbarProps) => {
   };
 
   const updateTextAreaPlaceholder = (show: boolean) => {
-    textarea?.setAttribute('placeholder', show ? getTranslation(localizationKeys.UI.textareaPlaceholder) : '');
+    textarea?.setAttribute(
+      'placeholder',
+      show ? getTranslation(localizationKeys.UI.textareaPlaceholder) : ''
+    );
   };
 
   const handleWebAccessToggle = () => setWebAccess((prev) => !prev);
@@ -114,7 +123,8 @@ const Toolbar = ({ textarea }: ToolbarProps) => {
     updateUserConfig({ promptUUID: uuid });
   };
 
-  const removeFocusFromCurrentElement = () => (document.activeElement as HTMLElement)?.blur();
+  const removeFocusFromCurrentElement = () =>
+    (document.activeElement as HTMLElement)?.blur();
 
   const webAccessToggle = (
     <div className="wcg-group wcg-relative wcg-flex">
@@ -156,15 +166,35 @@ const Toolbar = ({ textarea }: ToolbarProps) => {
         {/* <div className={`wcg-flex ${webAccess ? '' : 'wcg-hidden'} wcg-w-full wcg-justify-between wcg-gap-1`}> */}
 
         <div class="wcg-scrollbar-hidden wcg-flex wcg-items-center wcg-justify-between wcg-gap-2 wcg-overflow-x-scroll wcg-px-1 lg:wcg-overflow-x-hidden">
-          <Dropdown value={numResults} onChange={handleNumResultsChange} options={numResultsOptions} />
-          <Dropdown value={timePeriod} onChange={handleTimePeriodChange} options={timePeriodOptions} />
-          <Dropdown value={region} onChange={handleRegionChange} options={regionOptions} />
+          <Dropdown
+            value={numResults}
+            onChange={handleNumResultsChange}
+            options={numResultsOptions}
+          />
+          <Dropdown
+            value={timePeriod}
+            onChange={handleTimePeriodChange}
+            options={timePeriodOptions}
+          />
+          <Dropdown
+            value={region}
+            onChange={handleRegionChange}
+            options={regionOptions}
+          />
           <Dropdown
             value={promptUUID}
             onChange={handlePromptChange}
             options={prompts
-              .map((prompt) => ({ value: prompt.uuid ?? 'undefin', label: prompt.name }))
-              .concat({ value: 'wcg-new-prompt', label: `+ ${getTranslation(localizationKeys.buttons.newPrompt)}` })}
+              .map((prompt) => ({
+                value: prompt.uuid ?? 'undefin',
+                label: prompt.name,
+              }))
+              .concat({
+                value: 'wcg-new-prompt',
+                label: `+ ${getTranslation(
+                  localizationKeys.buttons.newPrompt
+                )}`,
+              })}
             onClick={handlePromptClick}
           />
         </div>

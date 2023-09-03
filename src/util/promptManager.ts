@@ -1,6 +1,11 @@
 import Browser from 'webextension-polyfill';
 import { v4 as uuidv4 } from 'uuid';
-import { getCurrentLanguageName, getLocaleLanguage, getTranslation, localizationKeys } from './localization';
+import {
+  getCurrentLanguageName,
+  getLocaleLanguage,
+  getTranslation,
+  localizationKeys,
+} from './localization';
 import { getUserConfig } from './userConfig';
 import { SearchResult } from 'src/content-scripts/web_search';
 
@@ -13,14 +18,18 @@ export interface Prompt {
   text: string;
 }
 
-const removeCommands = (query: string) => query.replace(/\/page:(\S+)\s*/g, '').replace(/\/site:(\S+)\s*/g, '');
+const removeCommands = (query: string) =>
+  query.replace(/\/page:(\S+)\s*/g, '').replace(/\/site:(\S+)\s*/g, '');
 
 export const promptContainsWebResults = async () => {
   const currentPrompt = await getCurrentPrompt();
   return currentPrompt.text.includes('{web_results}');
 };
 
-export const compilePrompt = async (results: SearchResult[] | undefined, query: string) => {
+export const compilePrompt = async (
+  results: SearchResult[] | undefined,
+  query: string
+) => {
   const currentPrompt = await getCurrentPrompt();
   const prompt = replaceVariables(currentPrompt.text, {
     '{web_results}': formatWebResults(results),
@@ -41,12 +50,16 @@ const formatWebResults = (results: SearchResult[] | undefined) => {
 
   let counter = 1;
   return results.reduce(
-    (acc, result): string => (acc += `[${counter++}] "${result.body}"\nURL: ${result.url}\n\n`),
+    (acc, result): string =>
+      (acc += `[${counter++}] "${result.body}"\nURL: ${result.url}\n\n`),
     ''
   );
 };
 
-const replaceVariables = (prompt: string, variables: { [key: string]: string }) => {
+const replaceVariables = (
+  prompt: string,
+  variables: { [key: string]: string }
+) => {
   let newPrompt = prompt;
   for (const key in variables) {
     try {
@@ -63,38 +76,58 @@ export const getDefaultPrompt = () => {
     name: 'Default prompt',
     text:
       getTranslation(localizationKeys.defaultPrompt, 'en') +
-      (getLocaleLanguage() !== 'en' ? `\nReply in ${getCurrentLanguageName()}` : ''),
+      (getLocaleLanguage() !== 'en'
+        ? `\nReply in ${getCurrentLanguageName()}`
+        : ''),
     uuid: 'default',
   };
 };
 
 const getDefaultEnglishPrompt = () => {
-  return { name: 'Default English', text: getTranslation(localizationKeys.defaultPrompt, 'en'), uuid: 'default_en' };
+  return {
+    name: 'Default English',
+    text: getTranslation(localizationKeys.defaultPrompt, 'en'),
+    uuid: 'default_en',
+  };
 };
 
 export const getCurrentPrompt = async () => {
   const userConfig = await getUserConfig();
   const currentPromptUuid = userConfig.promptUUID;
   const savedPrompts = await getSavedPrompts();
-  return savedPrompts.find((i: Prompt) => i.uuid === currentPromptUuid) || getDefaultPrompt();
+  return (
+    savedPrompts.find((i: Prompt) => i.uuid === currentPromptUuid) ||
+    getDefaultPrompt()
+  );
 };
 
 export const getSavedPrompts = async (addDefaults = true) => {
-  const { [SAVED_PROMPTS_KEY]: localPrompts, [SAVED_PROMPTS_MOVED_KEY]: promptsMoved } =
-    await Browser.storage.local.get({ [SAVED_PROMPTS_KEY]: [], [SAVED_PROMPTS_MOVED_KEY]: false });
+  const {
+    [SAVED_PROMPTS_KEY]: localPrompts,
+    [SAVED_PROMPTS_MOVED_KEY]: promptsMoved,
+  } = await Browser.storage.local.get({
+    [SAVED_PROMPTS_KEY]: [],
+    [SAVED_PROMPTS_MOVED_KEY]: false,
+  });
 
   let savedPrompts = localPrompts;
 
   if (!promptsMoved) {
-    const syncStorage = await Browser.storage.sync.get({ [SAVED_PROMPTS_KEY]: [] });
+    const syncStorage = await Browser.storage.sync.get({
+      [SAVED_PROMPTS_KEY]: [],
+    });
     const syncPrompts = syncStorage?.[SAVED_PROMPTS_KEY] ?? [];
 
     savedPrompts = localPrompts.reduce((prompts: Prompt[], prompt: Prompt) => {
-      if (!prompts.some(({ uuid }) => uuid === prompt.uuid)) prompts.push(prompt);
+      if (!prompts.some(({ uuid }) => uuid === prompt.uuid))
+        prompts.push(prompt);
       return prompts;
     }, syncPrompts);
 
-    await Browser.storage.local.set({ [SAVED_PROMPTS_KEY]: savedPrompts, [SAVED_PROMPTS_MOVED_KEY]: true });
+    await Browser.storage.local.set({
+      [SAVED_PROMPTS_KEY]: savedPrompts,
+      [SAVED_PROMPTS_MOVED_KEY]: true,
+    });
     await Browser.storage.sync.set({ [SAVED_PROMPTS_KEY]: [] });
   }
 

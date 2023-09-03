@@ -13,7 +13,10 @@ const cleanText = (text: string) =>
     .replace(/\t/g, '')
     .replace(/\n+(\s*\n)*/g, '\n');
 
-export async function getWebpageTitleAndText(url: string, html_str = ''): Promise<SearchResult> {
+export async function getWebpageTitleAndText(
+  url: string,
+  html_str = ''
+): Promise<SearchResult> {
   let html = html_str;
   if (!html) {
     let response: Response;
@@ -40,7 +43,11 @@ export async function getWebpageTitleAndText(url: string, html_str = ''): Promis
   const parsed = new Readability(doc).parse();
 
   if (!parsed || !parsed.textContent) {
-    return { title: 'Could not parse the page.', body: 'Could not parse the page.', url };
+    return {
+      title: 'Could not parse the page.',
+      body: 'Could not parse the page.',
+      url,
+    };
   }
 
   let text = cleanText(parsed.textContent);
@@ -48,7 +55,8 @@ export async function getWebpageTitleAndText(url: string, html_str = ''): Promis
   const userConfig = await getUserConfig();
   if (userConfig.trimLongText && text.length > 14400) {
     text = text.slice(0, 14400);
-    text += "\n\n[Text has been trimmed to 14,500 characters. You can disable this on WebChatGPT's options page.]";
+    text +=
+      "\n\n[Text has been trimmed to 14,500 characters. You can disable this on WebChatGPT's options page.]";
   }
   return { title: parsed.title, body: text, url };
 }

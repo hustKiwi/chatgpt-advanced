@@ -1,5 +1,9 @@
 import { h, render } from 'preact';
-import { getTranslation, localizationKeys, setLocaleLanguage } from 'src/util/localization';
+import {
+  getTranslation,
+  localizationKeys,
+  setLocaleLanguage,
+} from 'src/util/localization';
 import { useLayoutEffect, useState } from 'preact/hooks';
 import PromptEditor from 'src/components/promptEditor';
 import NavBar from 'src/components/navBar';
@@ -9,7 +13,10 @@ import OptionsEditor from 'src/components/optionsEditor';
 
 const Footer = () => (
   <div className="wcg-flex wcg-flex-col wcg-items-center wcg-p-4">
-    <p style={{ whiteSpace: 'pre-line' }} className="wcg-m-0 wcg-p-1 wcg-text-center wcg-text-lg">
+    <p
+      style={{ whiteSpace: 'pre-line' }}
+      className="wcg-m-0 wcg-p-1 wcg-text-center wcg-text-lg"
+    >
       {getTranslation(localizationKeys.UI.supportMe)}
     </p>
     <div className="wcg-flex wcg-flex-row wcg-items-center wcg-gap-4">
@@ -30,7 +37,11 @@ const Footer = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src="../leave_review.png" alt="Review on Chrome Web Store" className="wcg-h-[4.25em] wcg-rounded-lg" />
+        <img
+          src="../leave_review.png"
+          alt="Review on Chrome Web Store"
+          className="wcg-h-[4.25em] wcg-rounded-lg"
+        />
       </a>
     </div>
   </div>

@@ -5,7 +5,11 @@ export const tooltipPositions = {
   bottom: 'wcg-tooltip-bottom',
 };
 
-function TooltipWrapper(props: { tip: string; children: JSX.Element; position?: string }) {
+function TooltipWrapper(props: {
+  tip: string;
+  children: JSX.Element;
+  position?: string;
+}) {
   if (!props.tip) return props.children;
 
   return (

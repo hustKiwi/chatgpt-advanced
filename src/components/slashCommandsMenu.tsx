@@ -20,7 +20,11 @@ export const slashCommands: Command[] = [
   },
 ];
 
-const SlashCommandItem = (props: { command: Command; onclick: (command: Command) => void; active?: boolean }) => {
+const SlashCommandItem = (props: {
+  command: Command;
+  onclick: (command: Command) => void;
+  active?: boolean;
+}) => {
   return (
     <div
       className={`flex-col p-3 gap-3 hover:bg-[#2A2B32] cursor-pointer text-white
@@ -30,7 +34,9 @@ const SlashCommandItem = (props: { command: Command; onclick: (command: Command)
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-col">
           <div className="text-sm font-bold">{props.command.name}</div>
-          <div className="text-sm">{getTranslation(props.command.description)}</div>
+          <div className="text-sm">
+            {getTranslation(props.command.description)}
+          </div>
         </div>
         {props.active ? icons.tabKey : null}
       </div>
@@ -52,7 +58,8 @@ function SlashCommandsMenu(props: { textarea: HTMLTextAreaElement | null }) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [activeElementIndex, setActiveElementIndex] = useState<number>(0);
   const [filter, setFilter] = useState<string>('');
-  const [filteredCommands, setFilteredCommands] = useState<Command[]>(slashCommands);
+  const [filteredCommands, setFilteredCommands] =
+    useState<Command[]>(slashCommands);
 
   const onTextAreaInput = (e: Event) => updateFilter(e);
 
@@ -66,7 +73,9 @@ function SlashCommandsMenu(props: { textarea: HTMLTextAreaElement | null }) {
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveElementIndex((prevIndex) => Math.min(prevIndex + 1, filteredCommands.length - 1));
+      setActiveElementIndex((prevIndex) =>
+        Math.min(prevIndex + 1, filteredCommands.length - 1)
+      );
     }
 
     if (e.key === 'Tab') {
@@ -102,7 +111,8 @@ function SlashCommandsMenu(props: { textarea: HTMLTextAreaElement | null }) {
   function setTextAreaValue(value: string, dispatchEvent = true) {
     if (!props.textarea) return;
     props.textarea.value = value;
-    if (dispatchEvent) props.textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    if (dispatchEvent)
+      props.textarea.dispatchEvent(new Event('input', { bubbles: true }));
     props.textarea.focus();
   }
 
@@ -123,7 +133,9 @@ function SlashCommandsMenu(props: { textarea: HTMLTextAreaElement | null }) {
     }
 
     getUserConfig().then((userConfig) => {
-      const newFilteredCommands = slashCommands.filter((command) => command.name.startsWith(filter));
+      const newFilteredCommands = slashCommands.filter((command) =>
+        command.name.startsWith(filter)
+      );
       setFilteredCommands(newFilteredCommands);
 
       setShowMenu(userConfig.webAccess && newFilteredCommands.length > 0);
@@ -143,7 +155,9 @@ function SlashCommandsMenu(props: { textarea: HTMLTextAreaElement | null }) {
     <ul
       className={`flex-col flex-1 overflow-y-auto border border-white/20 rounded-md bg-gray-900 shadow-[0_0_10px_rgba(0,0,0,0.10)]`}
     >
-      <li className="px-3 p-2 text-xs text-white b-2 border-b border-white/20">WebChatGPT Commands</li>
+      <li className="px-3 p-2 text-xs text-white b-2 border-b border-white/20">
+        WebChatGPT Commands
+      </li>
 
       {filteredCommands.map((command) => {
         return (
